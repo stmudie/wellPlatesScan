@@ -203,7 +203,7 @@
 			sampleIncludeTemp.forEach(function(element,key){sampleInclude[sampleOrder[key]] = element});
 			
 			var data = {};
-			data['platename'] = platename;
+			data['platename'] = globalplate;
 			data['sampleNames'] = sampleNames;
 			data['sampleConc'] = sampleConc;
 			data['sampleType'] = sampleType;
@@ -215,8 +215,8 @@
 		}
 		
 		function savePlate(){
-			//platename = $("#platename").val()
-			platename = globalplate;// = platename;
+			platename = $("#platename").val()
+			globalplate = platename;
 			
 			$("#qrimage").attr('src','../qrcode/' + globalepn + '/' + platename);
 			$("#qrimagelink").attr('href','../qrcode/' + globalepn + '/' + platename);

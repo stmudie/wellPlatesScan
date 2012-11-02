@@ -65,7 +65,7 @@ class WellNamespace(BaseNamespace):
 	    types = [data['sampleType'][int(order)] for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
 	    washes = [data['washType'][int(order)] for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
 	
-	sampleNameString = sampleNames.join(samplesNames, "")
+	sampleNameString = "".join(sampleNames)
 	sampleNameCoord = [len(name) for name in sampleNames]
 
 	basePV = "SR13ID01HU02IOC02:"
@@ -157,7 +157,7 @@ def serve_img_empty():
     return serve_pil_image(img)
 
 if __name__ == '__main__':
-    print 'Listening on port 80 and on port 843 (flash policy server)'
-    SocketIOServer(('0.0.0.0', 80), app,
+    print 'Listening on port 8080 and on port 843 (flash policy server)'
+    SocketIOServer(('0.0.0.0', 8080), app,
         resource="socket.io", policy_server=True,
         policy_listener=('0.0.0.0', 10843)).serve_forever()
