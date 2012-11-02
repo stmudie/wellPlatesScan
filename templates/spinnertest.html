@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Sortable - Display as grid</title>
+	<link rel="stylesheet" href="static/jquery/ui/css/jquery.ui.all.css">
+	<script src="static/jquery/jquery-1.8.2.js"></script>
+	<script src="static/jquery/ui/jquery.ui.core.js"></script>
+	<script src="static/jquery/ui/jquery.ui.widget.js"></script>
+	<script src="static/jquery/ui/jquery.ui.mouse.js"></script>
+	<script src="static/jquery/ui/jquery.ui.sortable.js"></script>
+	<script src="static/jquery/ui/jquery.ui.spinner.js"></script>
+	<script src="static/jquery/ui/jquery.ui.button.js"></script>
+	<link rel="stylesheet" href="static/demos.css">
+	<style>
+	#sortableHead { list-style-type: none; float: left; margin: 0; padding: 0; width: 1450px; }
+	#sortableRowNames {list-style-type: none; float: left; margin: 0; margin-right: 55px; padding: 0; width: 50px;}
+	#sortable { list-style-type: none; float: left; margin: 0; padding: 0; width: 1350px; }
+	#sortableHead li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 45px; font-size: 4em; text-align: center;}
+	#sortableRowNames li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 75px; font-size: 4em; text-align: center;}
+	#sortable li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 75px; font-size: 4em; text-align: center; border-radius: 10px;}
+	.green {background: green;}
+	.lightblue {background: lightblue;}
+	.royalblue {background: royalblue;}
+	.grey {background: gray;}
+	input {display:block; margin-top:10px; margin-left: 5px; width:82px;}
+	select {display: block; margin: 3px; font-size: x-small; width:90px;}
+	</style>
+	<script>
+	$(function() {
+		//var spinner = $( "#spinner").spinner();
+		
+		$("#spinner").spinner({
+			step : 0.01,
+			spin : function(event, ui){
+				alert("spin");
+			}
+		});
+		
+		$( "button" ).button();
+	});
+	</script>
+</head>
+<body>
+	<p>
+		<label for="spinner">Select a value:</label>
+		<input id="spinner" name="value" value="10">
+	</p>
+	
+
+</body>
+</html>

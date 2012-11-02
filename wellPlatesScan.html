@@ -1,0 +1,1423 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Sortable - Display as grid</title>
+	<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css">
+	<script src="http://jqueryui.com/jquery-1.7.2.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.mouse.js"></script>
+	<script src="http://jqueryui.com/ui/jquery.ui.sortable.js"></script>
+	<link rel="stylesheet" href="http://jqueryui.com/demos/demos.css">
+	<style>
+	#sortableHead { list-style-type: none; float: left; margin: 0; padding: 0; width: 1450px; }
+	#sortableRowNames {list-style-type: none; float: left; margin: 0; margin-right: 55px; padding: 0; width: 50px;}
+	#sortable { list-style-type: none; float: left; margin: 0; padding: 0; width: 1350px; }
+	#sortableHead li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 45px; font-size: 4em; text-align: center;}
+	#sortableRowNames li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 75px; font-size: 4em; text-align: center;}
+	#sortable li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 75px; font-size: 4em; text-align: center; border-radius: 10px;}
+	input {display:block; margin-top:10px; margin-left: 5px; width:82px;}
+	select {display: block; margin: 3px; font-size: x-small; width:90px;}
+	</style>
+	<script>
+	$(function() {
+		$( "#sortable, #sortableHead, #sortableRowNames" ).sortable({
+			items: "li:not(.ui-state-disabled)"
+		});
+
+		$( "#sortable, #sortableHead, #sortableRowNames" ).disableSelection();
+		
+	});
+	</script>
+</head>
+<body>
+<div class="demo" style="width:1500px">
+
+<ul id="sortableHead">
+	<li class="ui-state-default ui-state-disabled"></li>
+	<li class="ui-state-default ui-state-disabled">1</li>
+	<li class="ui-state-default ui-state-disabled">2</li>
+	<li class="ui-state-default ui-state-disabled">3</li>
+	<li class="ui-state-default ui-state-disabled">4</li>
+	<li class="ui-state-default ui-state-disabled">5</li>
+	<li class="ui-state-default ui-state-disabled">6</li>
+	<li class="ui-state-default ui-state-disabled">7</li>
+	<li class="ui-state-default ui-state-disabled">8</li>
+	<li class="ui-state-default ui-state-disabled">9</li>
+	<li class="ui-state-default ui-state-disabled">10</li>
+	<li class="ui-state-default ui-state-disabled">11</li>
+	<li class="ui-state-default ui-state-disabled">12</li>
+</ul>
+
+<ul id="sortableRowNames">
+	<li class="ui-state-default ui-state-disabled">A</li>
+	<li class="ui-state-default ui-state-disabled">B</li>
+	<li class="ui-state-default ui-state-disabled">C</li>
+	<li class="ui-state-default ui-state-disabled">D</li>
+	<li class="ui-state-default ui-state-disabled">E</li>
+	<li class="ui-state-default ui-state-disabled">F</li>
+	<li class="ui-state-default ui-state-disabled">G</li>
+	<li class="ui-state-default ui-state-disabled">H</li>
+</ul>
+
+<ul id="sortable">
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "4">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+	<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+			<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+		<li class="ui-state-default">
+		<input type='text' size='14'/>
+		<select>
+			<option value = "1">Sample
+			<option value = "2">Buffer
+			<option value = "3">Repeat Buffer
+		</select>
+		<select>
+			<option value = "1">None
+			<option value = "2">Water
+			<option value = "3">Detergent
+			<option value = "3">Protein Killer
+		</select>
+	</li>
+	
+</ul>
+
+</div>
+
+</body>
+</html>

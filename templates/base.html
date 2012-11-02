@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Sortable - Display as grid</title>
+	<link rel="stylesheet" href="{{rel}}static/jquery/ui/css/jquery-ui.css">
+	<script type="text/javascript" src="{{rel}}static/socket.io.js"></script>		
+	<script src="{{rel}}static/jquery/jquery-1.8.2.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.core.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.widget.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.mouse.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.sortable.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.selectable.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.spinner.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.button.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery.ui.tabs.js"></script>
+	<link rel="stylesheet" href="{{rel}}static/demos.css">
+	<style>
+	
+	/*styles for the Run Order Tab*/
+	.sortableRowNamesOrder {list-style-type: none; float: left; margin: 0; margin-top: 10px; margin-right: 5px; padding: 0; width: 25px;}
+	.sortableRowNamesOrder li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 20px; height: 40px; font-size: 1em; text-align: center;}
+	.sortableOrder { list-style-type: none; float: left; margin: 0; margin-top: 10px; padding: 0; width: 100px; }
+	.sortableOrder li { margin: 0px 0px 0px 0px; padding: 1px; float: left; width: 100px; height: 40px;  text-align: center; border-radius: 5px; border: 1px solid red;}
+	.sortOrderCell {text-align: left; opacity: .5; font-size: 1.2em; padding-left : 5px; margin-right: 80px;}
+	.sortOrderName {font-weight: bold;}
+	.sortOrderConc {font-size: 0.5em;}
+	.sortOrderConcUnit {font-size: 0.5em;}
+	.removeSelect {background: rgb(235,235,235) !important; border: hidden !important;}
+	.deselectbutton {width: 100px; margin-right: 26px;}
+	.stop-button {background: rgb(200,40,40) !important;color: rgb(240,240,240) !important;}
+	.stop-button:hover {background: rgb(180,40,40) !important;color: rgb(255,255,255) !important;}
+	.stop-button:active {background: rgb(255,0,0) !important;color: rgb(255,255,255) !important;}
+	.run-button {background: rgb(40,200,40) !important;}
+	.run-button:hover {background: rgb(40,180,40) !important;color: rgb(255,255,255) !important;}
+	.run-button:active {background: rgb(0,255,0) !important; color: rgb(0,0,0) !important;}
+	/* ****** */
+	
+	#topbar {padding: 10px 5px;}
+	#runbar {padding: 10px 5px;}
+	#selecttools {margin-bottom: 5px; float:left;}
+	#sortableHead { list-style-type: none; float: left; margin: 0; padding: 0; width: 1450px; }
+	#sortableRowNames {list-style-type: none; float: left; margin: 0; margin-right: 55px; padding: 0; width: 50px;}
+	#sortable { list-style-type: none; float: left; margin: 0; padding: 0; width: 1350px; }
+	#sortableHead li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 45px; font-size: 4em; text-align: center;}
+	#sortableRowNames li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 125px; font-size: 4em; text-align: center;}
+	#sortable li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 100px; height: 125px;  text-align: center; border-radius: 10px;}
+	
+	.sampleName {display:block; margin-top:10px; margin-left: 5px; width:82px;}
+	.sampleConc {display:block; margin-top: 0px; margin-left: 5px; width:82px;}
+	.sampleConcSpin {width: 65px;}
+	li .handle { background: #ddddf5; position: relative; left: 0; top: 0; bottom: 0; padding:0px; }
+	.ui-selecting { background: #eee; }
+	.ui-selecting .handle { background: #ddd; }
+	.ui-selected { background: #def; border: 1px solid red;}
+	.ui-selected .handle { background: #cde; }
+	select {display: block; margin: 3px; font-size: x-small; width:90px;}
+	</style>
+	<script>
+		WEB_SOCKET_SWF_LOCATION = "{{rel}}static/WebSocketMain.swf";
+		WEB_SOCKET_DEBUG = true;
+		
+		// socket.io specific code
+		var socket = io.connect('');
+		var globalepn;
+		var globalplate;
+				
+		socket.on('connect', function(){
+			socket.emit('connect')
+		});
+		
+		socket.on('epn', function(epn){
+			globalepn = epn;
+			if (epn != undefined && '{{plate}}' != '')
+			{
+				socket.emit('load',epn,'{{plate}}');
+			}
+		});
+		
+		socket.on('loadlist', function (list) {
+			
+		});
+		
+		socket.on('platedata', function(epn,plate,data){
+			
+			globalepn = epn;
+			globalplate = plate;
+			
+			console.log('load:' + globalepn + " " + globalplate);
+			
+			$("#qrimage").attr('src','../qrcode/' + epn + '/' + plate);
+			$("#qrimagelink").attr('href','../qrcode/' + epn + '/' + plate);
+			
+			$(".sampleName").each(function(index){
+				$(this).val(data.sampleNames[index]);
+			});
+			$(".sampleConc").each(function(index){
+				$(this).val(data.sampleConc[index]);
+				sampleColour($(this.parentNode.parentNode),data.sampleConc[index]);
+			});
+			$(".sampleType").each(function(index){
+				$(this).val(data.sampleType[index]);
+				sampleTypeColour($(this.parentNode),data.sampleType[index]);
+			});
+			$(".washType").each(function(index){
+				$(this).val(data.washType[index]);
+			});
+			
+			$(".sortableOrder li").each(function(){
+				num = parseInt($(this).attr("id").split("_")[1]);
+				if (data.sampleInclude[num] == 1){
+					$(this).addClass("ui-selected").css("border","1px solid rgb(255,100,0)");
+				}
+				else{
+					$(this).removeClass("ui-selected").css("border","");
+				}
+			});
+			resortSortableOrder(data.sampleOrder);
+						
+		});
+		
+		function sampleColour(target, value){
+			target.css({background: "hsl(120,50%,"+Math.max((80-(value)*7),10)+"%)"})
+		}
+
+		function sampleTypeColour(target, value){
+			switch (value) {
+				case "0":
+					target.css({background: "hsl(120,0%,92%)"});
+					break;
+				case "1":
+					target.css({background: "hsl(120,50%,50%)"});
+					break;
+				case "2":
+					target.css({background: "hsl(190,50%,50%)"});
+					break;
+				case "3":
+					target.css({background: "hsl(200,50%,40%)"});
+					break;
+				}
+		}
+		
+		function resortSortableOrder(order){
+			if (order == undefined){
+				order = [];
+				for(i=0;i<96;i++){order.push(i)};
+			}
+			
+			if (order.length < 96){
+				missing = [];
+				for (i=0;i<96;i++){
+					if (order.indexOf(i)==-1){
+						missing.push(i);
+					}
+				}
+				order.push.apply(order, missing);
+			}
+			
+			for(j=0;j<8;j++){
+				for(i=11;i>=0;i--){
+					currentSort = $("#sortOrder_"+order[i+j*12]);
+					locationSort = $("#sortableOrderCol_" + j + " li:eq(0)");
+					if (currentSort.attr("id") != locationSort.attr("id")){
+						if ($("#sortableOrderCol_" + j + " li").length == 0){
+							currentSort.appendTo($("#sortableOrderCol_" + j));
+						}
+						else{
+							currentSort.insertBefore(locationSort);
+						}
+					}
+				}	
+			}
+		}
+		
+		function harvestData(){
+			
+			var sampleNames = new Array();
+			var sampleConc = new Array();
+			var sampleType = new Array();
+			var washType = new Array();
+			var sampleOrder = new Array();
+			var sampleIncludeTemp = new Array();
+			var sampleInclude = new Array();
+			
+		
+			$(".sampleName").each(function(index){
+				sampleNames.push($(this).val());
+			});
+			$(".sampleConc").each(function(index){
+				sampleConc.push($(this).val());
+			});
+			$(".sampleType").each(function(index){
+				sampleType.push($(this).val());
+			});
+			$(".washType").each(function(index){
+				washType.push($(this).val());
+			});
+			$(".sortableOrder li").each(function(index){
+				sampleOrder.push($(this).attr('id').split("_")[1]);
+				sampleIncludeTemp.push($(this).hasClass('ui-selected'));
+			});
+			
+			sampleIncludeTemp.forEach(function(element,key){sampleInclude[sampleOrder[key]] = element});
+			
+			var data = {};
+			data['platename'] = platename;
+			data['sampleNames'] = sampleNames;
+			data['sampleConc'] = sampleConc;
+			data['sampleType'] = sampleType;
+			data['washType'] = washType;
+			data['sampleOrder'] = sampleOrder;
+			data['sampleInclude'] = sampleInclude;
+			
+			return data;
+		}
+		
+		function savePlate(){
+			//platename = $("#platename").val()
+			platename = globalplate;// = platename;
+			
+			$("#qrimage").attr('src','../qrcode/' + globalepn + '/' + platename);
+			$("#qrimagelink").attr('href','../qrcode/' + globalepn + '/' + platename);
+				
+			socket.emit('save', harvestData());
+		}
+		
+		$(function() {
+			
+			$(document).ready(function(){
+				var alphabet = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ").split("");
+				for (i=0;i<96;i++)
+				{
+					well = alphabet[Math.floor(i/12)] + (i%12+1);
+					$("#sortOrderCell_"+i).text(well);
+				}
+			});
+			
+			$( "#sortableHead, #sortableRowNames" ).sortable({
+				items: "li:not(.ui-state-disabled)"
+				})
+					
+			$( "#sortable" ).sortable({
+				items: "li:not(.ui-state-disabled)",
+				handle: ".handle"
+				}).selectable();
+
+			$( ".sortableOrder" ).sortable({
+				connectWith: ".connectSortable",
+				start: function(event, ui) {
+					ui.item.data('startTarget', event.target);
+				},
+				receive: function(ev,ui){
+					startCol = parseInt($(ui.item.data('startTarget')).attr("id").split("_")[1]);
+					endCol = parseInt($(this).attr("id").split("_")[1]);
+					if (startCol > endCol){
+						for (i=endCol; i < startCol; i++){
+							$("#sortableOrderCol_" + i + " li:eq(12)").insertBefore($("#sortableOrderCol_" + (i+1) + " li:eq(0)"));
+						}
+					};
+					if (startCol < endCol){
+						for (i=startCol+1; i <= endCol; i++){
+							$("#sortableOrderCol_" + i + " li:eq(0)").insertAfter($("#sortableOrderCol_" + (i-1) + " li:eq(10)"));
+						}
+					}
+				}
+				}).selectable({
+				selected: function(event,ui) {
+					$(ui.selected).css("border","1px solid rgb(255,100,0)")
+				},
+				unselected: function(event,ui) {
+					$(ui.unselected).css("border","")
+				}
+				});
+			
+			$(".removeSelect").removeClass('ui-selectee');
+			
+			
+			
+			//$( "#sortable, #sortableHead, #sortableRowNames" ).disableSelection();
+			
+			$( ".sampleType").change(function(ev){	
+				sampleTypeColour($(ev.target.parentNode),$(ev.target).val());
+				
+			});
+			
+			$( "#save").click(function(){
+				savePlate();				
+			});
+			$("#load").click(function(){socket.emit('getplates')});
+			$("#run").click(function(){console.log( '{{test}}' )});
+			$("#runall").button().click(function(){
+				savePlate();
+				socket.emit("runall",globalepn, globalplate);
+			});
+			$("#runselected").button().click(function(){
+				savePlate();
+				socket.emit("runselected",globalepn, globalplate);
+			});
+			$("#stop").button().click(function(){
+				//socket.emit("stop");
+			});
+			$( "#radio" ).buttonset();
+			$( "#tab2tools").buttonset();
+			$( "#tab2btools").buttonset();
+			$(".deselectbutton").button().click( function(){
+				col = $(this).attr("id").split("_")[1];
+				$("#sortableOrderCol_" + col).children().removeClass("ui-selected").css("border","");
+			});
+			$( "#Edit" ).click(function(){
+				$(".sampleConc").spinner({
+				min : 0.1,
+				max : 10,
+				step : 0.1,
+				spin : function(ev,ui){
+					sampleColour($(ev.target.parentNode.parentNode),ui.value);
+				},
+				stop : function(ev,ui){
+					sampleColour($(ev.target.parentNode.parentNode),ev.target.value);
+					$(ev.target.parentNode.parentNode).children(".sampleType").prop('selectedIndex',1);
+				}
+				});
+				$(".sampleConc").addClass("sampleConcSpin");
+				$( "button" ).button();
+				$("#sortable").selectable("disable");
+				$("#sortable").css('opacity', 1);
+				$(".fillbutton").button("disable");
+			});
+			$( "#Lock" ).click(function(){
+				$(".sampleConc").removeClass("sampleConcSpin");
+				try
+				{
+					$(".sampleConc").spinner("destroy");	
+				}
+				catch(err)
+				{
+					console.log('Not a spinner yet')
+				}
+				$(".fillbutton").button("disable");
+			});
+			$( "#Select" ).click(function(){
+				$(".sampleConc").removeClass("sampleConcSpin");
+				try
+				{
+					$(".sampleConc").spinner("destroy");	
+				}
+				catch(err)
+				{
+					console.log('Not a spinner yet');
+				}
+				
+				$("#sortable").selectable("enable");
+				$(".fillbutton").button("enable");
+			});
+			
+			$( "#FillRight" ).button({disabled : true})
+				.click(function(){
+					console.log("Fill Right");
+			});
+			$( "#FillAll" ).button({disabled : true})
+				.click(function(){
+					console.log("Fill All");
+			});
+			$( "#SortDeselect" ).button()
+				.click(function(){
+					$(".sortableOrder li").removeClass("ui-selected").css("border","");
+			});
+			
+			$( "#tabs" ).tabs({collapsible: true}).find( ".ui-tabs-nav" ).sortable({ axis: "x" });
+			
+			$("#scanplate").click(function(){
+				sampleNames = [];
+				sampleType = [];
+				sampleConc = [];
+				$(".sampleName").each(function(index){
+					sampleNames.push($(this).val());
+				});
+				$(".sampleType").each(function(index){
+					sampleType.push($(this).val());
+				});
+				$(".sampleConc").each(function(index){
+					sampleConc.push($(this).val());
+				});
+				for (i=0;i<96;i++)
+				{
+					$("#sortOrderName_"+i).text(sampleNames[i]);
+					sampleTypeColour($("#sortOrder_"+i),sampleType[i]);
+					if (sampleType[i] == "1"){
+						sampleColour($("#sortOrder_"+i),sampleConc[i]);
+					};
+					if (sampleConc[i] > 0){
+						$("#sortOrderConc_"+i).text(sampleConc[i]);
+						$("#sortOrderConcUnit_"+i).text(" mg/ml");
+					};
+					
+				}
+			});
+			$("#SortSortable").click(function(){
+				$(".sortableOrder").selectable("disable");
+				$(".sortableOrder").sortable("enable");
+				$(".sortableOrder").css('opacity', 1);
+			});
+			$("#SortSelectable").click(function(){
+				$(".sortableOrder").selectable("enable");
+				$(".sortableOrder").sortable("disable");
+				$(".sortableOrder").css('opacity', 1);
+			});
+		});
+	</script>
+</head>
+<body>
+
+<span id="topbar" class="ui-widget-header ui-corner-all">
+	<input id="platename"></input>
+	<button id="save">Save</button>
+	<button id="load">Load</button>
+	<button id="StopTop">Stop</button>
+</span>	
+	
+<a id="qrimagelink" href="./qrcode"><img id="qrimage" src="./qrcode" height=50px style="vertical-align: middle"></a>
+
+<div class="demo" style="width:1500px">
+
+<div id="tabs">
+	<ul>
+		<li><a id="sampleplate" href="#tabs-1">Sample Plate</a></li>
+		<li><a id="scanplate" href="#tabs-2">Scan Plate</a></li>
+	</ul>
+	
+	<div id="tabs-1" style="height:1200px">
+	
+		<div id="radio" style="float:left; margin-top: 2px">
+			<input type="radio" id="Lock" name="radio" checked="checked"/><label for="Lock">Lock</label>
+			<input type="radio" id="Edit" name="radio" /><label for="Edit">Edit</label>
+			<input type="radio" id="Select" name="radio" /><label for="Select">Select</label>
+		</div>
+		
+		<div id="selecttools">
+			<button id="FillRight" class="fillbutton">Fill Right</button>
+			<button id="FillAll" class="fillbutton">Fill All</button>
+		</div>	
+	
+		<ul id="sortableHead">
+			<li class="ui-state-default ui-state-disabled"></li>
+			<li class="ui-state-default ui-state-disabled">1</li>
+			<li class="ui-state-default ui-state-disabled">2</li>
+			<li class="ui-state-default ui-state-disabled">3</li>
+			<li class="ui-state-default ui-state-disabled">4</li>
+			<li class="ui-state-default ui-state-disabled">5</li>
+			<li class="ui-state-default ui-state-disabled">6</li>
+			<li class="ui-state-default ui-state-disabled">7</li>
+			<li class="ui-state-default ui-state-disabled">8</li>
+			<li class="ui-state-default ui-state-disabled">9</li>
+			<li class="ui-state-default ui-state-disabled">10</li>
+			<li class="ui-state-default ui-state-disabled">11</li>
+			<li class="ui-state-default ui-state-disabled">12</li>
+		</ul>
+		
+		<ul id="sortableRowNames">
+			<li class="ui-state-default ui-state-disabled">A</li>
+			<li class="ui-state-default ui-state-disabled">B</li>
+			<li class="ui-state-default ui-state-disabled">C</li>
+			<li class="ui-state-default ui-state-disabled">D</li>
+			<li class="ui-state-default ui-state-disabled">E</li>
+			<li class="ui-state-default ui-state-disabled">F</li>
+			<li class="ui-state-default ui-state-disabled">G</li>
+			<li class="ui-state-default ui-state-disabled">H</li>
+		</ul>
+		<ul id="sortable">
+			{% for well in wells %}
+				<li id="{{ well }}" class="ui-state-default">
+						<div class='handle ui-corner-top'><span class='ui-icon ui-icon-arrow-4'></span></div>
+						<input type='text' class=sampleName>
+						<!--<label for="spinner" size='10'>Select a value:</label> -->
+						<input id="{{ well}}_conc" class="sampleConc" style="margin-top: 0;">
+						<select id="{{ well }}_sampleType" class="sampleType">
+								<option value = "0"></option>
+								<option value = "1">Sample</option>
+								<option value = "2">Buffer</option>
+								<option value = "3">Repeat Buffer</option>
+						</select>
+						<select class="washType">
+								<option value = "1">None</option>
+								<option value = "2">Water</option>
+								<option value = "3">Detergent</option>
+								<option value = "4">Protein Killer</option>
+						</select>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="tabs-2" style="height:1500px">
+		
+		<div>
+			<button id="runall" class="run-button">Run All</button>
+			<button id="runselected" class="run-button">Run Selected</button>
+			<button id="stop" class="stop-button">Stop</button>
+		<div>
+		
+		</br>
+		
+		<div id="tab2tools" style="float: left;">
+			<input type="radio" id="SortSortable" name="tab2tools" checked="checked"/><label for="SortSortable">Reorder</label>
+			<input type="radio" id="SortSelectable" name="tab2tools" /><label for="SortSelectable">Select</label>
+		</div>
+		
+		<div>
+			<button id="SortDeselect" style="margin-bottom: 10px">Deselect All</button>
+		</div>
+		
+		<button id="deselectCol_0" class="deselectbutton" style="margin-left: 30px; font-size: 0.5em;">Deselect Column</button>
+		{% for col in range (1,8) %}
+			<button id="deselectCol_{{col}}" class="deselectbutton" style="font-size: 0.5em;">Deselect Column</button>
+		{% endfor %}
+		<br/>
+				
+		{% for col in range (0,8) %}
+			<ul id="sortableRowNamesOrder_{{col}}" class="sortableRowNamesOrder">
+				{% for num in range(col*12+1,col*12+13) %}
+				<li class="ui-state-default ui-state-disabled">{{num}}</li>
+				{% endfor %}
+			</ul>
+			<ul id="sortableOrderCol_{{col}}"  class="sortableOrder connectSortable">
+				{% for num2 in range(col*12,(col+1)*12) %}
+					<li id=sortOrder_{{ num2 }} class="ui-state-default">
+						<label id=sortOrderCell_{{ num2 }} class='sortOrderCell removeSelect'></label>
+						<br class='removeSelect'/>
+						<label id=sortOrderName_{{ num2 }} class='sortOrderName removeSelect'></label>
+						<br class='removeSelect' />
+						<label id=sortOrderConc_{{ num2 }} class='sortOrderConc removeSelect'></label>
+						<label id=sortOrderConcUnit_{{ num2 }} class='sortOrderConcUnit removeSelect'></label>
+					</li>
+				{% endfor %}
+			</ul>
+		
+		{% endfor %}
+		
+	</div>
+</div>
+
+</div>
+
+</body>
+</html>
