@@ -125,16 +125,16 @@
 
 		function sampleTypeColour(target, value){
 			switch (value) {
-				case "0":
+				case "-1":
 					target.css({background: "hsl(120,0%,92%)"});
 					break;
 				case "1":
 					target.css({background: "hsl(120,50%,50%)"});
 					break;
-				case "2":
+				case "0":
 					target.css({background: "hsl(190,50%,50%)"});
 					break;
-				case "3":
+				case "2":
 					target.css({background: "hsl(200,50%,40%)"});
 					break;
 				}
@@ -316,7 +316,7 @@
 				},
 				stop : function(ev,ui){
 					sampleColour($(ev.target.parentNode.parentNode),ev.target.value);
-					$(ev.target.parentNode.parentNode).children(".sampleType").prop('selectedIndex',1);
+					$(ev.target.parentNode.parentNode).children(".sampleType").prop('selectedIndex',2);
 				}
 				});
 				$(".sampleConc").addClass("sampleConcSpin");
@@ -473,16 +473,16 @@
 						<!--<label for="spinner" size='10'>Select a value:</label> -->
 						<input id="{{ well}}_conc" class="sampleConc" style="margin-top: 0;">
 						<select id="{{ well }}_sampleType" class="sampleType">
-								<option value = "0"></option>
+								<option value = "-1">None</option>
+                                                                <option value = "0">Buffer</option>
 								<option value = "1">Sample</option>
-								<option value = "2">Buffer</option>
-								<option value = "3">Repeat Buffer</option>
+								<option value = "2">Repeat Buffer</option>
 						</select>
 						<select class="washType">
-								<option value = "1">None</option>
-								<option value = "2">Water</option>
+								<option value = "0">None</option>
+								<option value = "1">Water</option>
+								<option value = "2">Protein Killer</option>
 								<option value = "3">Detergent</option>
-								<option value = "4">Protein Killer</option>
 						</select>
 				</li>
 			{% endfor %}

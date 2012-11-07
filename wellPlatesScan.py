@@ -55,18 +55,24 @@ class WellNamespace(BaseNamespace):
         data = pickle.loads(r.get('well:' + epn + ':plate:' + plate))
 	if type == 'all':
 	    sampleNames = [data['sampleNames'][int(order)] for order in data['sampleOrder'] if data['sampleNames'][int(order)] != ""]
-	    positions = [order for order in data['sampleOrder'] if data['sampleNames'][int(order)] != ""]
-	    types = [data['sampleType'][int(order)] for order in data['sampleOrder'] if data['sampleNames'][int(order)] != ""]
-	    washes = [data['washType'][int(order)] for order in data['sampleOrder'] if data['sampleNames'][int(order)] != ""]
+	    positions = [1+int(order) for order in data['sampleOrder'] if data['sampleNames'][int(order)] != ""]
+	    types = [int(data['sampleType'][int(order)]) for order in data['sampleOrder'] if data['sampleNames'][int(order)] != ""]
+	    washes = [int(data['washType'][int(order)]) for order in data['sampleOrder'] if data['sampleNames'][int(order)] != ""]
 	    
 	elif type == 'selected':
 	    sampleNames = [data['sampleNames'][int(order)] for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
-	    positions = [order for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
-	    types = [data['sampleType'][int(order)] for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
-	    washes = [data['washType'][int(order)] for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
+	    positions = [1+int(order) for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
+	    types = [int(data['sampleType'][int(order)]) for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
+	    washes = [int(data['washType'][int(order)]) for order in data['sampleOrder'] if data['sampleInclude'][int(order)] == 1 and data['sampleNames'][int(order)] != ""]
 	
 	sampleNameString = "".join(sampleNames)
-	sampleNameCoord = [len(name) for name in sampleNames]
+	sampleNameLen = [len(name) for name in sampleNames]
+        sampleNameCoord = []
+	sampleNameCoord.append(0) 
+        for i in range(1,len(sampleNameLen)):
+            sampleNameCoord.append(sampleNameLen[i-1]+sampleNameCoord[i-1])
+
+        print len(sampleNameCoord)
 
 	basePV = "SR13ID01HU02IOC02:"
 
@@ -82,8 +88,8 @@ class WellNamespace(BaseNamespace):
 	result += caput(scanPV+'D01PV','SR13ID01SYR01:FULL_SEL_SQ.VAL')
 	result += caput(scanPV+'PDLY',2)
 	result += caput(scanPV+'DDLY',5)
-	if result != 7 :
-	    print "Something wrong setting some PVs. Continuing anyway."
+	if result != 9 :
+	    print "Something wrong setting " + str(9-result) + " PVs. Continuing anyway."
 	
 	# Setup positioners for proteins
 	result = 0
@@ -91,33 +97,33 @@ class WellNamespace(BaseNamespace):
 	dictKey = ['COORD','WASH','TYPE']
 	data = {'COORD': positions, 'WASH': washes, 'TYPE': types}
 	for posNum in range(3):
-	    scanPV = basePV + 'scan' + posNum + '.'
-	    result += caput(scanPV+'R1PV', positioner[posNum])
-	    result += caput(scanPV+'P1PV', positioner[posNum])
-	    result += caput(scanPV+'P1SM', 1)
-	    result += caput(scanPV+'P1PA', data[dictKey[posNum]])
+	    scanPV = basePV + 'scan1.'
+            result += caput(scanPV+'R'+str(1+posNum)+'PV', positioner[posNum])
+	    result += caput(scanPV+'P'+str(1+posNum)+'PV', positioner[posNum])
+	    result += caput(scanPV+'P'+str(1+posNum)+'SM', 1)
+            result += caput(scanPV+'P'+str(1+posNum)+'PA', data[dictKey[posNum]])
 	result += caput(scanPV+'NPTS', len(positions))
-	if result != 5 :
-	    print "Something wrong setting some PVs. Continuing anyway."
+	if result != 13 :
+	    print "Something wrong setting " + str(13-result) + " some PVs. Continuing anyway."
 	
 	# Setup sample name positioners
-	result = 0
-	result += caput(basePV+'fileNames', sampleNameString)
+        result = 0
+	result += caput(basePV+'fileNames', str(sampleNameString))
 	result += caput(basePV+'fileIndices', sampleNameCoord)
 	result += caput(scanPV+'P4SM', 0)
 	result += caput(scanPV+'P4SP', 1)
-	result += caput(scanPV+'P4EP', number)
+	result += caput(scanPV+'P4EP', len(positions))
 	result += caput(scanPV+'R4PV', basePV + 'fileIndex1')
 	result += caput(scanPV+'P4PV', basePV + 'fileIndex1')
 	if result != 7 :
 	    print "Something wrong setting some PVs. Continuing anyway."
 	    
 	# Setup detectors
-	result = caput(scanPV+'T1PV', '13PIL1:cam1:Acquire')
+	result = caput(scanPV+'T1PV', 'SR13ID01SYR01:FULL_SEL_SQ.VAL')
 	if result != 1 :
 	    print "Something wrong setting some PVs. Continuing anyway."
 	
-	#scanning = caput(basePV+'scan1:EXSC', 1)
+	scanning = caput(basePV+'scan1.EXSC', 1)
 
     def on_runall(self,epn,plate):
 	self.run(epn, plate, type = 'all')
@@ -157,7 +163,7 @@ def serve_img_empty():
     return serve_pil_image(img)
 
 if __name__ == '__main__':
-    print 'Listening on port 8080 and on port 843 (flash policy server)'
-    SocketIOServer(('0.0.0.0', 8080), app,
+    print 'Listening on port 8081 and on port 843 (flash policy server)'
+    SocketIOServer(('0.0.0.0', 8081), app,
         resource="socket.io", policy_server=True,
         policy_listener=('0.0.0.0', 10843)).serve_forever()
