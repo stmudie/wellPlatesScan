@@ -35,6 +35,8 @@ class WellNamespace(BaseNamespace):
     def on_connect(self):
         print 'connect'
 	self.emit('epn', self.request['epn'][0])
+	plates = list(r.smembers('well:' + self.request['epn'][0] + ':plates'))
+	self.emit('loadlist',plates)
 
     def on_save(self, data):
         epn = self.request['epn'][0]
@@ -42,11 +44,6 @@ class WellNamespace(BaseNamespace):
         r.sadd('well:' + epn + ':plates', data['platename'])
         r.set('well:' + epn + ':plate:' + data['platename'], pickle.dumps(data))
  
-    def on_getplates(self):
-        epn = self.request['epn'][0]
-	plates = list(r.smembers('well:' + epn + ':plates'))
-	self.emit('loadlist',plates)
-    
     def on_load(self, epn, plate):
 	data = pickle.loads(r.get('well:' + epn + ':plate:' + plate))
 	self.emit('platedata', epn, plate, data)
@@ -99,16 +96,16 @@ class WellNamespace(BaseNamespace):
 	for posNum in range(3):
 	    scanPV = basePV + 'scan1.'
             result += caput(scanPV+'R'+str(1+posNum)+'PV', positioner[posNum])
-	    result += caput(scanPV+'P'+str(1+posNum)+'PV', positioner[posNum])
+            result += caput(scanPV+'P'+str(1+posNum)+'PV', positioner[posNum])
 	    result += caput(scanPV+'P'+str(1+posNum)+'SM', 1)
             result += caput(scanPV+'P'+str(1+posNum)+'PA', data[dictKey[posNum]])
-	result += caput(scanPV+'NPTS', len(positions))
+        result += caput(scanPV+'NPTS', len(positions))
 	if result != 13 :
 	    print "Something wrong setting " + str(13-result) + " some PVs. Continuing anyway."
 	
 	# Setup sample name positioners
         result = 0
-	result += caput(basePV+'fileNames', str(sampleNameString))
+        result += caput(basePV+'fileNames', str(sampleNameString))
 	result += caput(basePV+'fileIndices', sampleNameCoord)
 	result += caput(scanPV+'P4SM', 0)
 	result += caput(scanPV+'P4SP', 1)

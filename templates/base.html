@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="{{rel}}static/jquery/ui/css/jquery-ui.css">
 	<script type="text/javascript" src="{{rel}}static/socket.io.js"></script>		
 	<script src="{{rel}}static/jquery/jquery-1.8.2.js"></script>
+	<script src="{{rel}}static/jquery/ui/jquery-ui.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.core.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.widget.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.mouse.js"></script>
@@ -78,7 +79,7 @@
 		});
 		
 		socket.on('loadlist', function (list) {
-			
+			$( "#platename" ).autocomplete( "option", "source", list);
 		});
 		
 		socket.on('platedata', function(epn,plate,data){
@@ -216,6 +217,15 @@
 		
 		function savePlate(){
 			platename = $("#platename").val()
+			if (platename == ''){
+				alert('No name given.')
+				return
+			}
+			var filenames = $('#platename').autocomplete( "option", "source");
+			if (filenames.indexOf(platename)!=-1){
+				yesno = confirm('Overwrite ' + platename + '?');
+				if (yesno )
+			}
 			globalplate = platename;
 			
 			$("#qrimage").attr('src','../qrcode/' + globalepn + '/' + platename);
@@ -286,7 +296,10 @@
 			$( "#save").click(function(){
 				savePlate();				
 			});
-			$("#load").click(function(){socket.emit('getplates')});
+			$("#load").click(function(){
+				globalplate = $("#platename").val()
+				socket.emit("load",globalepn,globalplate);
+			});
 			$("#run").click(function(){console.log( '{{test}}' )});
 			$("#runall").button().click(function(){
 				savePlate();
@@ -404,6 +417,7 @@
 				$(".sortableOrder").sortable("disable");
 				$(".sortableOrder").css('opacity', 1);
 			});
+			$("#platename").autocomplete({});
 		});
 	</script>
 </head>
