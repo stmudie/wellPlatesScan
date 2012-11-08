@@ -223,8 +223,10 @@
 			}
 			var filenames = $('#platename').autocomplete( "option", "source");
 			if (filenames.indexOf(platename)!=-1){
-				yesno = confirm('Overwrite ' + platename + '?');
-				if (yesno )
+				ok = confirm('Overwrite ' + platename + '?');
+				if (ok == false){
+					return
+				}
 			}
 			globalplate = platename;
 			
