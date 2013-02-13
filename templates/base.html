@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Sortable - Display as grid</title>
 	<link rel="stylesheet" href="{{rel}}static/jquery/ui/css/jquery-ui.css">
-	<script type="text/javascript" src="{{rel}}static/socket.io.js"></script>		
+	<script type="text/javascript" src="{{rel}}static/socket.io.js"></script>
 	<script src="{{rel}}static/jquery/jquery-1.8.2.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery-ui.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.core.js"></script>
@@ -22,7 +22,7 @@
 	.sortableRowNamesOrder {list-style-type: none; float: left; margin: 0; margin-top: 10px; margin-right: 5px; padding: 0; width: 25px;}
 	.sortableRowNamesOrder li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 20px; height: 40px; font-size: 1em; text-align: center;}
 	.sortableOrder { list-style-type: none; float: left; margin: 0; margin-top: 10px; padding: 0; width: 100px; }
-	.sortableOrder li { margin: 0px 0px 0px 0px; padding: 1px; float: left; width: 100px; height: 40px;  text-align: center; border-radius: 5px; border: 1px solid red;}
+	.sortableOrder li { margin: 0px 0px 0px 0px; padding: 1px; float: left; width: 100px; height: 40px;  text-align: center; border-radius: 5px; }
 	.sortOrderCell {text-align: left; opacity: .5; font-size: 1.2em; padding-left : 5px; margin-right: 80px;}
 	.sortOrderName {font-weight: bold;}
 	.sortOrderConc {font-size: 0.5em;}
@@ -52,9 +52,8 @@
 	.sampleConcSpin {width: 65px;}
 	li .handle { background: #ddddf5; position: relative; left: 0; top: 0; bottom: 0; padding:0px; }
 	.ui-selecting { background: #eee; }
-	.ui-selecting .handle { background: #ddd; }
-	.ui-selected { background: #def; border: 1px solid red;}
-	.ui-selected .handle { background: #cde; }
+	.ui-selecting .handle { background: pink; }
+	.ui-selected .handle { background: pink; }
 	select {display: block; margin: 3px; font-size: x-small; width:90px;}
 	</style>
 	<script>
@@ -218,14 +217,14 @@
 		function savePlate(){
 			platename = $("#platename").val()
 			if (platename == ''){
-				alert('No name given.')
-				return
+				alert('No name given.');
+				return -1;
 			}
 			var filenames = $('#platename').autocomplete( "option", "source");
 			if (filenames.indexOf(platename)!=-1){
 				ok = confirm('Overwrite ' + platename + '?');
 				if (ok == false){
-					return
+					return -1;
 				}
 			}
 			globalplate = platename;
@@ -234,6 +233,13 @@
 			$("#qrimagelink").attr('href','../qrcode/' + globalepn + '/' + platename);
 				
 			socket.emit('save', harvestData());
+			return 0;
+		}
+		
+		function selectSelectable(elementtoselect,selectable){
+			$(".ui-selected", selectable).not(elementtoselect).removeClass("ui-selected").addClass("ui-unselecting");
+			elementtoselect.addClass('ui-selecting');
+			selectable.data("selectable")._mouseStop(null);
 		}
 		
 		$(function() {
@@ -246,10 +252,21 @@
 					$("#sortOrderCell_"+i).text(well);
 				}
 			});
-			
+			$('.sampleName').focus(function() {
+				selectSelectable($(this).parent(),$("#sortable"));
+				});
+			$('.sampleConc').focus(function() {
+				selectSelectable($(this).parent(),$("#sortable"));
+				});
+			$('.sampleType').focus(function() {
+				selectSelectable($(this).parent(),$("#sortable"));
+				});
+			$('.washType').focus(function() {
+				selectSelectable($(this).parent(),$("#sortable"));
+				});
 			$( "#sortableHead, #sortableRowNames" ).sortable({
 				items: "li:not(.ui-state-disabled)"
-				})
+				});
 					
 			$( "#sortable" ).sortable({
 				items: "li:not(.ui-state-disabled)",
@@ -296,7 +313,9 @@
 			});
 			
 			$( "#save").click(function(){
-				savePlate();				
+				if (savePlate() == -1){
+					alert('Plate not saved');	
+				}
 			});
 			$("#load").click(function(){
 				globalplate = $("#platename").val()
@@ -304,12 +323,14 @@
 			});
 			$("#run").click(function(){console.log( '{{test}}' )});
 			$("#runall").button().click(function(){
-				savePlate();
+				if (savePlate() == 0){
 				socket.emit("runall",globalepn, globalplate);
+				};
 			});
 			$("#runselected").button().click(function(){
-				savePlate();
+				if (savePlate() == 0){
 				socket.emit("runselected",globalepn, globalplate);
+				}
 			});
 			$("#stop").button().click(function(){
 				//socket.emit("stop");
@@ -336,9 +357,14 @@
 				});
 				$(".sampleConc").addClass("sampleConcSpin");
 				$( "button" ).button();
+				$(".sampleType").prop("disabled",false);
+				$(".washType").prop("disabled",false);
+				$(".sampleName").prop("disabled",false);
+				$(".sampleName").prop("disabled",false);
+				$(".sampleConc").prop("disabled",false);
 				$("#sortable").selectable("disable");
 				$("#sortable").css('opacity', 1);
-				$(".fillbutton").button("disable");
+				$(".fillbuttonselect").button("disable");
 			});
 			$( "#Lock" ).click(function(){
 				$(".sampleConc").removeClass("sampleConcSpin");
@@ -350,7 +376,11 @@
 				{
 					console.log('Not a spinner yet')
 				}
-				$(".fillbutton").button("disable");
+				$(".sampleType").prop("disabled","disabled");
+				$(".washType").prop("disabled","disabled");
+				$(".sampleName").prop("disabled","disabled");
+				$(".sampleConc").prop("disabled","disabled");
+				$(".fillbuttonselect").button("disable");
 			});
 			$( "#Select" ).click(function(){
 				$(".sampleConc").removeClass("sampleConcSpin");
@@ -362,19 +392,136 @@
 				{
 					console.log('Not a spinner yet');
 				}
-				
+				$(".sampleType").prop("disabled","disabled");
+				$(".washType").prop("disabled","disabled");
+				$(".sampleName").prop("disabled","disabled");
+				$(".sampleConc").prop("disabled","disabled");
 				$("#sortable").selectable("enable");
-				$(".fillbutton").button("enable");
+				$(".fillbuttonselect").button("enable");
 			});
-			
-			$( "#FillRight" ).button({disabled : true})
+			$( "#FillBottomColumn" ).button({disabled : false})
 				.click(function(){
-					console.log("Fill Right");
+					firstSelect = $(".well").filter(".ui-selected");
+					name = (firstSelect.children('.sampleName').val());
+					conc = (firstSelect.children('.sampleConc').val());
+					type = (firstSelect.children('.sampleType').val());
+					wash = (firstSelect.children('.washType').val());
+					wellNumber = firstSelect.index();
+					columnNumber = wellNumber%12;
+					rowNumber = Math.floor(wellNumber/12);
+					for (i=rowNumber+1;i<8;i++)
+					{
+						$(".sampleName").eq(i*12+columnNumber).val(name);
+						$(".sampleConc").eq(i*12+columnNumber).val(conc);
+						$(".sampleType").eq(i*12+columnNumber).val(type);
+						$(".washType").eq(i*12+columnNumber).val(wash);
+					}
 			});
-			$( "#FillAll" ).button({disabled : true})
+			$( "#FillEndRow" ).button({disabled : false})
 				.click(function(){
-					console.log("Fill All");
+					firstSelect = $(".well").filter(".ui-selected");
+					name = (firstSelect.children('.sampleName').val());
+					conc = (firstSelect.children('.sampleConc').val());
+					type = (firstSelect.children('.sampleType').val());
+					wash = (firstSelect.children('.washType').val());
+					wellNumber = firstSelect.index();
+					columnNumber = wellNumber%12;
+					rowNumber = Math.floor(wellNumber/12);
+					$(".sampleName").slice(wellNumber+1,rowNumber*12+12).each(function(index){
+						$(this).val(name);
+					});
+					$(".sampleConc").slice(wellNumber+1,rowNumber*12+12).each(function(index){
+						$(this).val(conc);
+					});
+					$(".sampleType").slice(wellNumber+1,rowNumber*12+12).each(function(index){
+						$(this).val(type);
+					});
+					$(".washType").slice(wellNumber+1,rowNumber*12+12).each(function(index){
+						$(this).val(wash);
+					});
 			});
+			$( "#FillAllColumns" ).button({disabled : false})
+				.click(function(){
+					for (i=0;i<12;i++)
+					{
+						name = ($(".sampleName").eq(i).val());
+						conc = ($(".sampleConc").eq(i).val());
+						type = ($(".sampleType").eq(i).val());
+						wash = ($(".washType").eq(i).val());
+						for(j=1;j<8;j++)
+						{
+							$(".sampleName").eq(j*12+i).val(name);
+							$(".sampleConc").eq(j*12+i).val(conc);
+							$(".sampleType").eq(j*12+i).val(type);
+							$(".washType").eq(j*12+i).val(wash);
+						}
+					}
+			});
+			$( "#FillAllRows" ).button({disabled : false})
+				.click(function(){
+					for (i=0;i<7;i++)
+					{
+						name = ($(".sampleName").eq(i*12).val());
+						conc = ($(".sampleConc").eq(i*12).val());
+						type = ($(".sampleType").eq(i*12).val());
+						wash = ($(".washType").eq(i*12).val());
+						$(".sampleName").slice(i*12+1,(i+1)*12).each(function(index){
+							$(this).val(name);
+						});
+						$(".sampleConc").slice(i*12+1,(i+1)*12).each(function(index){
+							$(this).val(conc);
+						});
+						$(".sampleType").slice(i*12+1,(i+1)*12).each(function(index){
+							$(this).val(type);
+						});
+						$(".washType").slice(i*12+1,(i+1)*12).each(function(index){
+							$(this).val(wash);
+						});
+					}
+			});
+			$( "#FillAll" ).button({disabled : false})
+				.click(function(){
+					name = ($(".sampleName").val());
+					conc = ($(".sampleConc").val());
+					type = ($(".sampleType").val());
+					wash = ($(".washType").val());
+					console.log(wash);
+					if (name=='' && conc=='' && type==-1 && wash==0) { return };
+					$(".sampleName").each(function(index){
+						$(this).val(name);
+					});
+					$(".sampleConc").each(function(index){
+						$(this).val(conc);
+					});
+					$(".sampleType").each(function(index){
+						$(this).val(type);
+					});
+					$(".washType").each(function(index){
+						$(this).val(wash);
+					});
+			});
+			$( "#ClearAll" ).button({disabled : false})
+				.click(function(){
+					$(".sampleName").each(function(index){
+						$(this).val('');
+					});
+					$(".sampleConc").each(function(index){
+						$(this).val('');
+					});
+					$(".sampleType").each(function(index){
+						$(this).val('');
+					});
+					$(".washType").each(function(index){
+						$(this).val('');
+					});
+			});
+			$( "#FillSelected" ).button({disabled : true})
+				.click(function(){
+					name = ($(".well").filter(".ui-selected").children('.sampleName').val());
+					$(".well").filter(".ui-selected").children('.sampleName').each(function(index){
+						$(this).val(name);
+					});
+			});	
 			$( "#SortDeselect" ).button()
 				.click(function(){
 					$(".sortableOrder li").removeClass("ui-selected").css("border","");
@@ -431,7 +578,7 @@
 	<button id="load">Load</button>
 	<button id="StopTop">Stop</button>
 </span>	
-	
+
 <a id="qrimagelink" href="./qrcode"><img id="qrimage" src="./qrcode" height=50px style="vertical-align: middle"></a>
 
 <div class="demo" style="width:1500px">
@@ -451,8 +598,13 @@
 		</div>
 		
 		<div id="selecttools">
-			<button id="FillRight" class="fillbutton">Fill Right</button>
+			<button id="FillSelected" class="fillbuttonselect">Fill Selected</button>
+			<button id="FillEndRow" class="fillbutton">Fill to End of Row</button>
+			<button id="FillBottomColumn" class="fillbutton">Fill to Bottom of Column</button>
+			<button id="FillAllRows" class="fillbutton">Fill All Rows</button>
+			<button id="FillAllColumns" class="fillbutton">Fill All Columns</button>
 			<button id="FillAll" class="fillbutton">Fill All</button>
+			<button id="ClearAll" class="fillbutton">Clear All</button>
 		</div>	
 	
 		<ul id="sortableHead">
@@ -483,7 +635,7 @@
 		</ul>
 		<ul id="sortable">
 			{% for well in wells %}
-				<li id="{{ well }}" class="ui-state-default">
+				<li id="{{ well }}" class="ui-state-default well">
 						<div class='handle ui-corner-top'><span class='ui-icon ui-icon-arrow-4'></span></div>
 						<input type='text' class=sampleName>
 						<!--<label for="spinner" size='10'>Select a value:</label> -->
