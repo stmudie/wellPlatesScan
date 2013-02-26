@@ -71,6 +71,7 @@
 		
 		socket.on('epn', function(epn){
 			globalepn = epn;
+			$("#epnTitle").html('Current USER/EPN: ' + epn);
 			if (epn != undefined && '{{plate}}' != '')
 			{
 				socket.emit('load',epn,'{{plate}}');
@@ -567,12 +568,19 @@
 				$(".sortableOrder").css('opacity', 1);
 			});
 			$("#platename").autocomplete({});
+			$("#userepn").change(function(){
+				socket.emit('changeepn',$(this).val());
+			});
 		});
 	</script>
 </head>
 <body>
 
+<H1 id="epnTitle"></H1>
 <span id="topbar" class="ui-widget-header ui-corner-all">
+	<label for="userepn">Username_EPN</label>
+	<input id="userepn"></input>	
+	<label for="platename">Plate Name</label>
 	<input id="platename"></input>
 	<button id="save">Save</button>
 	<button id="load">Load</button>

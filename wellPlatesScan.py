@@ -7,9 +7,11 @@ import cPickle as pickle
 import qrcode
 from StringIO import StringIO
 from epics import PV, caput
+import time
 
 from flask import Flask, request, send_file, render_template
 import redis
+from ReverseProxied import ReverseProxied
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -20,10 +22,11 @@ wellIDs = ['Well_' + str(num) for num in range(96)]
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 app = Flask(__name__)
+app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 app.debug = True
 
-attributes = { 'epn': ['mudie_123'] }
+attributes = { 'epn': ['default_0001'] }
 
 def serve_pil_image(pil_img):
     img_io = StringIO()
@@ -34,6 +37,13 @@ def serve_pil_image(pil_img):
 class WellNamespace(BaseNamespace):
     def on_connect(self):
         print 'connect'
+	self.emit('epn', self.request['epn'][0])
+	plates = list(r.smembers('well:' + self.request['epn'][0] + ':plates'))
+	self.emit('loadlist',plates)
+
+    def on_changeepn(self, user_epn):
+	print 'changeepn'
+	self.request['epn'][0]=user_epn
 	self.emit('epn', self.request['epn'][0])
 	plates = list(r.smembers('well:' + self.request['epn'][0] + ':plates'))
 	self.emit('loadlist',plates)
@@ -66,9 +76,9 @@ class WellNamespace(BaseNamespace):
 	sampleNameLen = [len(name) for name in sampleNames]
         sampleNameCoord = []
 	sampleNameCoord.append(0) 
-        for i in range(1,len(sampleNameLen)):
+        for i in range(1,len(sampleNameLen)+1):
             sampleNameCoord.append(sampleNameLen[i-1]+sampleNameCoord[i-1])
-
+	
         print len(sampleNameCoord)
 
 	basePV = "SR13ID01HU02IOC02:"
@@ -98,8 +108,9 @@ class WellNamespace(BaseNamespace):
             result += caput(scanPV+'R'+str(1+posNum)+'PV', positioner[posNum])
             result += caput(scanPV+'P'+str(1+posNum)+'PV', positioner[posNum])
 	    result += caput(scanPV+'P'+str(1+posNum)+'SM', 1)
+            time.sleep(0.1)
             result += caput(scanPV+'P'+str(1+posNum)+'PA', data[dictKey[posNum]])
-        result += caput(scanPV+'NPTS', len(positions))
+            result += caput(scanPV+'NPTS', len(positions))
 	if result != 13 :
 	    print "Something wrong setting " + str(13-result) + " some PVs. Continuing anyway."
 	
@@ -140,7 +151,7 @@ def run_socketio(path):
 @app.route("/")
 def well():
     template = env.get_template('base.html')
-    return template.render(wells=wellIDs,epn='mudie_123',plate='')
+    return template.render(wells=wellIDs,epn='Norwood_5374A',plate='')
 
 @app.route("/<epn>/<plate>")
 def well1(epn,plate):
