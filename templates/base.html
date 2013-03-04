@@ -412,10 +412,10 @@
 					rowNumber = Math.floor(wellNumber/12);
 					for (i=rowNumber+1;i<8;i++)
 					{
-						$(".sampleName").eq(i*12+columnNumber).val(name);
-						$(".sampleConc").eq(i*12+columnNumber).val(conc);
-						$(".sampleType").eq(i*12+columnNumber).val(type);
-						$(".washType").eq(i*12+columnNumber).val(wash);
+						$(".sampleName").eq(i*12+columnNumber).val(name).change();
+						$(".sampleConc").eq(i*12+columnNumber).val(conc).change();
+						$(".sampleType").eq(i*12+columnNumber).val(type).change();
+						$(".washType").eq(i*12+columnNumber).val(wash).change();
 					}
 			});
 			$( "#FillEndRow" ).button({disabled : false})
@@ -429,16 +429,17 @@
 					columnNumber = wellNumber%12;
 					rowNumber = Math.floor(wellNumber/12);
 					$(".sampleName").slice(wellNumber+1,rowNumber*12+12).each(function(index){
-						$(this).val(name);
+						$(this).val(name).change();
+					});
+					$(".sampleType").slice(wellNumber+1,rowNumber*12+12).each(function(index){
+						$(this).val(type).change();
 					});
 					$(".sampleConc").slice(wellNumber+1,rowNumber*12+12).each(function(index){
 						$(this).val(conc);
-					});
-					$(".sampleType").slice(wellNumber+1,rowNumber*12+12).each(function(index){
-						$(this).val(type);
+						sampleColour($(this.parentNode),$(this).val());
 					});
 					$(".washType").slice(wellNumber+1,rowNumber*12+12).each(function(index){
-						$(this).val(wash);
+						$(this).val(wash).change();
 					});
 			});
 			$( "#FillAllColumns" ).button({disabled : false})
@@ -451,10 +452,10 @@
 						wash = ($(".washType").eq(i).val());
 						for(j=1;j<8;j++)
 						{
-							$(".sampleName").eq(j*12+i).val(name);
-							$(".sampleConc").eq(j*12+i).val(conc);
-							$(".sampleType").eq(j*12+i).val(type);
-							$(".washType").eq(j*12+i).val(wash);
+							$(".sampleName").eq(j*12+i).val(name).change();
+							$(".sampleConc").eq(j*12+i).val(conc).change();
+							$(".sampleType").eq(j*12+i).val(type).change();
+							$(".washType").eq(j*12+i).val(wash).change();
 						}
 					}
 			});
@@ -467,16 +468,16 @@
 						type = ($(".sampleType").eq(i*12).val());
 						wash = ($(".washType").eq(i*12).val());
 						$(".sampleName").slice(i*12+1,(i+1)*12).each(function(index){
-							$(this).val(name);
+							$(this).val(name).change();
 						});
 						$(".sampleConc").slice(i*12+1,(i+1)*12).each(function(index){
-							$(this).val(conc);
+							$(this).val(conc).change();
 						});
 						$(".sampleType").slice(i*12+1,(i+1)*12).each(function(index){
-							$(this).val(type);
+							$(this).val(type).change();
 						});
 						$(".washType").slice(i*12+1,(i+1)*12).each(function(index){
-							$(this).val(wash);
+							$(this).val(wash).change();
 						});
 					}
 			});
@@ -489,38 +490,53 @@
 					console.log(wash);
 					if (name=='' && conc=='' && type==-1 && wash==0) { return };
 					$(".sampleName").each(function(index){
-						$(this).val(name);
+						$(this).val(name).change();
+					});
+					$(".sampleType").each(function(index){
+						$(this).val(type).change();
 					});
 					$(".sampleConc").each(function(index){
 						$(this).val(conc);
-					});
-					$(".sampleType").each(function(index){
-						$(this).val(type);
+						$(this).spinner("stop");
 					});
 					$(".washType").each(function(index){
-						$(this).val(wash);
+						$(this).val(wash).change();
 					});
+					
 			});
 			$( "#ClearAll" ).button({disabled : false})
 				.click(function(){
 					$(".sampleName").each(function(index){
-						$(this).val('');
+						$(this).val('').change();
 					});
 					$(".sampleConc").each(function(index){
-						$(this).val('');
+						$(this).val('').change();
 					});
 					$(".sampleType").each(function(index){
-						$(this).val('');
+						$(this).val('').change();
 					});
 					$(".washType").each(function(index){
-						$(this).val('');
+						$(this).val('').change();
 					});
 			});
 			$( "#FillSelected" ).button({disabled : true})
 				.click(function(){
 					name = ($(".well").filter(".ui-selected").children('.sampleName').val());
+					conc = ($(".well").filter(".ui-selected").children('.sampleConc').val());
+					type = ($(".well").filter(".ui-selected").children('.sampleType').val());
+					wash = ($(".well").filter(".ui-selected").children('.washType').val());
+										
 					$(".well").filter(".ui-selected").children('.sampleName').each(function(index){
-						$(this).val(name);
+						$(this).val(name).change();
+					});
+					$(".well").filter(".ui-selected").children('.sampleConc').each(function(index){
+						$(this).val(conc).change();
+					});
+					$(".well").filter(".ui-selected").children('.sampleType').each(function(index){
+						$(this).val(type).change();
+					});
+					$(".well").filter(".ui-selected").children('.washType').each(function(index){
+						$(this).val(wash).change();
 					});
 			});	
 			$( "#SortDeselect" ).button()
