@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Sortable - Display as grid</title>
+	<title>Wellplate Scanner</title>
 	<link rel="stylesheet" href="{{rel}}static/jquery/ui/css/jquery-ui.css">
 	<script type="text/javascript" src="{{rel}}static/socket.io.js"></script>
 	<script src="{{rel}}static/jquery/jquery-1.8.2.js"></script>
@@ -12,7 +12,6 @@
 	<script src="{{rel}}static/jquery/ui/jquery.ui.mouse.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.sortable.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.selectable.js"></script>
-	<script src="{{rel}}static/jquery/ui/jquery.ui.spinner.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.button.js"></script>
 	<script src="{{rel}}static/jquery/ui/jquery.ui.tabs.js"></script>
 	<link rel="stylesheet" href="{{rel}}static/demos.css">
@@ -49,11 +48,12 @@
 	
 	.sampleName {display:block; margin-top:10px; margin-left: 5px; width:82px;}
 	.sampleConc {display:block; margin-top: 0px; margin-left: 5px; width:82px;}
-	.sampleConcSpin {width: 65px;}
-	li .handle { background: #ddddf5; position: relative; left: 0; top: 0; bottom: 0; padding:0px; }
-	.ui-selecting { background: #eee; }
-	.ui-selecting .handle { background: pink; }
-	.ui-selected .handle { background: pink; }
+
+	.ui-icon.white { background-image: url(static/jquery/ui/css/images/ui-icons_ffffff_256x240.png); }
+
+	li .selecthandle { background: #ddddf5; position: relative; left: 0; top: 0; bottom: 0; padding:0px; }
+	.ui-selecting .selecthandle { background: pink; }
+	.ui-selected .selecthandle { background: pink; }
 	select {display: block; margin: 3px; font-size: x-small; width:90px;}
 	</style>
 	<script>
@@ -119,7 +119,16 @@
 			resortSortableOrder(data.sampleOrder);
 						
 		});
-		
+		function isNumberKey(evt,id) {
+			var charCode = (evt.which) ? evt.which : event.keyCode;
+		        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+				$('#'+id).css("background","rgb(255,0,0)");
+				setTimeout(function(){$('#'+id).css("background","rgb(255,255,255)")},200);
+				return false;
+			} else {
+				return true;
+			}      
+		};
 		function sampleColour(target, value){
 			target.css({background: "hsl(120,50%,"+Math.max((80-(value)*7),10)+"%)"})
 		}
@@ -128,15 +137,19 @@
 			switch (value) {
 				case "-1":
 					target.css({background: "hsl(120,0%,92%)"});
+					$(".ui-icon-arrow-4").removeClass("white");
 					break;
 				case "1":
 					target.css({background: "hsl(120,50%,50%)"});
+					$(".ui-icon-arrow-4").addClass("white");
 					break;
 				case "0":
 					target.css({background: "hsl(190,50%,50%)"});
+					$(".ui-icon-arrow-4").addClass("white");
 					break;
 				case "2":
 					target.css({background: "hsl(200,50%,40%)"});
+					$(".ui-icon-arrow-4").addClass("white");
 					break;
 				}
 		}
@@ -253,6 +266,7 @@
 					$("#sortOrderCell_"+i).text(well);
 				}
 			});
+			
 			$('.sampleName').focus(function() {
 				selectSelectable($(this).parent(),$("#sortable"));
 				});
@@ -271,7 +285,7 @@
 					
 			$( "#sortable" ).sortable({
 				items: "li:not(.ui-state-disabled)",
-				handle: ".handle"
+				handle: ".movehandle"
 				}).selectable();
 
 			$( ".sortableOrder" ).sortable({
@@ -312,7 +326,11 @@
 				sampleTypeColour($(ev.target.parentNode),$(ev.target).val());
 				
 			});
-			
+			$( ".sampleConc").change(function(ev){	
+				$(ev.target.parentNode).children(".sampleType").prop('selectedIndex',2).change();
+				sampleColour($(ev.target.parentNode),ev.target.value);
+				
+			});
 			$( "#save").click(function(){
 				if (savePlate() == -1){
 					alert('Plate not saved');	
@@ -342,63 +360,6 @@
 			$(".deselectbutton").button().click( function(){
 				col = $(this).attr("id").split("_")[1];
 				$("#sortableOrderCol_" + col).children().removeClass("ui-selected").css("border","");
-			});
-			$( "#Edit" ).click(function(){
-				$(".sampleConc").spinner({
-				min : 0.1,
-				max : 10,
-				step : 0.1,
-				spin : function(ev,ui){
-					sampleColour($(ev.target.parentNode.parentNode),ui.value);
-				},
-				stop : function(ev,ui){
-					sampleColour($(ev.target.parentNode.parentNode),ev.target.value);
-					$(ev.target.parentNode.parentNode).children(".sampleType").prop('selectedIndex',2);
-				}
-				});
-				$(".sampleConc").addClass("sampleConcSpin");
-				$( "button" ).button();
-				$(".sampleType").prop("disabled",false);
-				$(".washType").prop("disabled",false);
-				$(".sampleName").prop("disabled",false);
-				$(".sampleName").prop("disabled",false);
-				$(".sampleConc").prop("disabled",false);
-				$("#sortable").selectable("disable");
-				$("#sortable").css('opacity', 1);
-				$(".fillbuttonselect").button("disable");
-			});
-			$( "#Lock" ).click(function(){
-				$(".sampleConc").removeClass("sampleConcSpin");
-				try
-				{
-					$(".sampleConc").spinner("destroy");	
-				}
-				catch(err)
-				{
-					console.log('Not a spinner yet')
-				}
-				$(".sampleType").prop("disabled","disabled");
-				$(".washType").prop("disabled","disabled");
-				$(".sampleName").prop("disabled","disabled");
-				$(".sampleConc").prop("disabled","disabled");
-				$(".fillbuttonselect").button("disable");
-			});
-			$( "#Select" ).click(function(){
-				$(".sampleConc").removeClass("sampleConcSpin");
-				try
-				{
-					$(".sampleConc").spinner("destroy");	
-				}
-				catch(err)
-				{
-					console.log('Not a spinner yet');
-				}
-				$(".sampleType").prop("disabled","disabled");
-				$(".washType").prop("disabled","disabled");
-				$(".sampleName").prop("disabled","disabled");
-				$(".sampleConc").prop("disabled","disabled");
-				$("#sortable").selectable("enable");
-				$(".fillbuttonselect").button("enable");
 			});
 			$( "#FillBottomColumn" ).button({disabled : false})
 				.click(function(){
@@ -453,8 +414,8 @@
 						for(j=1;j<8;j++)
 						{
 							$(".sampleName").eq(j*12+i).val(name).change();
-							$(".sampleConc").eq(j*12+i).val(conc).change();
 							$(".sampleType").eq(j*12+i).val(type).change();
+							$(".sampleConc").eq(j*12+i).val(conc).change();
 							$(".washType").eq(j*12+i).val(wash).change();
 						}
 					}
@@ -470,11 +431,11 @@
 						$(".sampleName").slice(i*12+1,(i+1)*12).each(function(index){
 							$(this).val(name).change();
 						});
-						$(".sampleConc").slice(i*12+1,(i+1)*12).each(function(index){
-							$(this).val(conc).change();
-						});
 						$(".sampleType").slice(i*12+1,(i+1)*12).each(function(index){
 							$(this).val(type).change();
+						});
+						$(".sampleConc").slice(i*12+1,(i+1)*12).each(function(index){
+							$(this).val(conc).change();
 						});
 						$(".washType").slice(i*12+1,(i+1)*12).each(function(index){
 							$(this).val(wash).change();
@@ -496,8 +457,7 @@
 						$(this).val(type).change();
 					});
 					$(".sampleConc").each(function(index){
-						$(this).val(conc);
-						$(this).spinner("stop");
+						$(this).val(conc).change();						
 					});
 					$(".washType").each(function(index){
 						$(this).val(wash).change();
@@ -509,17 +469,17 @@
 					$(".sampleName").each(function(index){
 						$(this).val('').change();
 					});
-					$(".sampleConc").each(function(index){
+					$(".sampleType").each(function(index){
 						$(this).val('').change();
 					});
-					$(".sampleType").each(function(index){
+					$(".sampleConc").each(function(index){
 						$(this).val('').change();
 					});
 					$(".washType").each(function(index){
 						$(this).val('').change();
 					});
 			});
-			$( "#FillSelected" ).button({disabled : true})
+			$( "#FillSelected" ).button({disabled : false})
 				.click(function(){
 					name = ($(".well").filter(".ui-selected").children('.sampleName').val());
 					conc = ($(".well").filter(".ui-selected").children('.sampleConc').val());
@@ -529,11 +489,11 @@
 					$(".well").filter(".ui-selected").children('.sampleName').each(function(index){
 						$(this).val(name).change();
 					});
-					$(".well").filter(".ui-selected").children('.sampleConc').each(function(index){
-						$(this).val(conc).change();
-					});
 					$(".well").filter(".ui-selected").children('.sampleType').each(function(index){
 						$(this).val(type).change();
+					});
+					$(".well").filter(".ui-selected").children('.sampleConc').each(function(index){
+						$(this).val(conc).change();
 					});
 					$(".well").filter(".ui-selected").children('.washType').each(function(index){
 						$(this).val(wash).change();
@@ -615,12 +575,6 @@
 	
 	<div id="tabs-1" style="height:1200px">
 	
-		<div id="radio" style="float:left; margin-top: 2px">
-			<input type="radio" id="Lock" name="radio" checked="checked"/><label for="Lock">Lock</label>
-			<input type="radio" id="Edit" name="radio" /><label for="Edit">Edit</label>
-			<input type="radio" id="Select" name="radio" /><label for="Select">Select</label>
-		</div>
-		
 		<div id="selecttools">
 			<button id="FillSelected" class="fillbuttonselect">Fill Selected</button>
 			<button id="FillEndRow" class="fillbutton">Fill to End of Row</button>
@@ -660,10 +614,10 @@
 		<ul id="sortable">
 			{% for well in wells %}
 				<li id="{{ well }}" class="ui-state-default well">
-						<div class='handle ui-corner-top'><span class='ui-icon ui-icon-arrow-4'></span></div>
+						<div class='selecthandle ui-corner-top'><span class='ui-icon ui-icon-circlesmall-plus'></span></div>
 						<input type='text' class=sampleName>
 						<!--<label for="spinner" size='10'>Select a value:</label> -->
-						<input id="{{ well}}_conc" class="sampleConc" style="margin-top: 0;">
+						<input id="{{ well}}_conc" class="sampleConc" style="margin-top: 0;" onkeypress="return isNumberKey(event,'{{ well}}_conc')">
 						<select id="{{ well }}_sampleType" class="sampleType">
 								<option value = "-1">None</option>
                                                                 <option value = "0">Buffer</option>
@@ -676,6 +630,7 @@
 								<option value = "2">Protein Killer</option>
 								<option value = "3">Detergent</option>
 						</select>
+						<div class='movehandle ui-corner-bottom'><span class='ui-icon ui-icon-arrow-4'></span></div>
 				</li>
 			{% endfor %}
 		</ul>
