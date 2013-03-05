@@ -327,8 +327,11 @@
 				
 			});
 			$( ".sampleConc").change(function(ev){	
-				$(ev.target.parentNode).children(".sampleType").prop('selectedIndex',2).change();
-				sampleColour($(ev.target.parentNode),ev.target.value);
+				if ($(ev.target).val() !='')
+				{
+					$(ev.target.parentNode).children(".sampleType").prop('selectedIndex',2).change();
+					sampleColour($(ev.target.parentNode),ev.target.value);
+				};
 				
 			});
 			$( "#save").click(function(){
@@ -469,10 +472,10 @@
 					$(".sampleName").each(function(index){
 						$(this).val('').change();
 					});
-					$(".sampleType").each(function(index){
+					$(".sampleConc").each(function(index){
 						$(this).val('').change();
 					});
-					$(".sampleConc").each(function(index){
+					$(".sampleType").each(function(index){
 						$(this).val('').change();
 					});
 					$(".washType").each(function(index){
