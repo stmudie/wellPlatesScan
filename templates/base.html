@@ -22,12 +22,13 @@
 	.sortableRowNamesOrder li { margin: 0px 0px 0px 0; padding: 1px; float: left; width: 20px; height: 40px; font-size: 1em; text-align: center;}
 	.sortableOrder { list-style-type: none; float: left; margin: 0; margin-top: 10px; padding: 0; width: 100px; }
 	.sortableOrder li { margin: 0px 0px 0px 0px; padding: 1px; float: left; width: 100px; height: 40px;  text-align: center; border-radius: 5px; }
-	.sortOrderCell {text-align: left; opacity: .5; font-size: 1.2em; padding-left : 5px; margin-right: 80px;}
-	.sortOrderName {font-weight: bold;}
-	.sortOrderConc {font-size: 0.5em;}
-	.sortOrderConcUnit {font-size: 0.5em;}
-	.removeSelect {background: rgb(235,235,235) !important; border: hidden !important;}
-	.deselectbutton {width: 100px; margin-right: 26px;}
+	.sortOrderCell {text-align: left; opacity: .5; font-size: 1.2em; padding-left : 5px; float: left;}
+	.selectedOrderCell {color: rgb(255,100,0);font-weight: bold; opacity: 1;}
+	.sortOrderName {font-weight: bold;text-align: center; word-break: break-word; display: inline-block;}
+	.sortOrderConc {font-size: 0.8em;}
+	.sortOrderConcUnit {font-size: 1em;}
+	.removeSelect {!important; border: hidden !important;}
+	.deselectbutton {width: 100px; margin-right:80px;}
 	.stop-button {background: rgb(200,40,40) !important;color: rgb(240,240,240) !important;}
 	.stop-button:hover {background: rgb(180,40,40) !important;color: rgb(255,255,255) !important;}
 	.stop-button:active {background: rgb(255,0,0) !important;color: rgb(255,255,255) !important;}
@@ -93,27 +94,29 @@
 			$("#qrimagelink").attr('href','../qrcode/' + epn + '/' + plate);
 			
 			$(".sampleName").each(function(index){
-				$(this).val(data.sampleNames[index]);
-			});
-			$(".sampleConc").each(function(index){
-				$(this).val(data.sampleConc[index]);
-				sampleColour($(this.parentNode.parentNode),data.sampleConc[index]);
+				$(this).val(data.sampleNames[index]).change();
 			});
 			$(".sampleType").each(function(index){
-				$(this).val(data.sampleType[index]);
-				sampleTypeColour($(this.parentNode),data.sampleType[index]);
+				$(this).val(data.sampleType[index]).change();
+				//sampleTypeColour($(this.parentNode),data.sampleType[index]);
+			});
+			$(".sampleConc").each(function(index){
+				$(this).val(data.sampleConc[index]).change();
+				//sampleColour($(this.parentNode.parentNode),data.sampleConc[index]);
 			});
 			$(".washType").each(function(index){
-				$(this).val(data.washType[index]);
+				$(this).val(data.washType[index]).change();
 			});
 			
 			$(".sortableOrder li").each(function(){
 				num = parseInt($(this).attr("id").split("_")[1]);
 				if (data.sampleInclude[num] == 1){
 					$(this).addClass("ui-selected").css("border","1px solid rgb(255,100,0)");
+					$(this).find(".sortOrderCell").addClass("selectedOrderCell");
 				}
 				else{
 					$(this).removeClass("ui-selected").css("border","");
+					$(this).find(".sortOrderCell").removeClass("selectedOrderCell");
 				}
 			});
 			resortSortableOrder(data.sampleOrder);
@@ -309,10 +312,12 @@
 				}
 				}).selectable({
 				selected: function(event,ui) {
-					$(ui.selected).css("border","1px solid rgb(255,100,0)")
+					$(ui.selected).css("border","1px solid rgb(255,100,0)");
+					$(ui.selected).children(".sortOrderCell").addClass("selectedOrderCell");
 				},
 				unselected: function(event,ui) {
-					$(ui.unselected).css("border","")
+					$(ui.unselected).css("border","");
+					$(ui.unselected).children(".sortOrderCell").removeClass("selectedOrderCell");
 				}
 				});
 			
@@ -324,6 +329,15 @@
 			
 			$( ".sampleType").change(function(ev){	
 				sampleTypeColour($(ev.target.parentNode),$(ev.target).val());
+				if ($(ev.target).val() == 0 || $(ev.target).val() == 2)
+				{
+					
+					$(ev.target.parentNode).children(".sampleConc").val("").prop('disabled',true);
+				}
+				else
+				{
+					$(ev.target.parentNode).children(".sampleConc").prop('disabled',false);
+				}
 				
 			});
 			$( ".sampleConc").change(function(ev){	
@@ -363,6 +377,7 @@
 			$(".deselectbutton").button().click( function(){
 				col = $(this).attr("id").split("_")[1];
 				$("#sortableOrderCol_" + col).children().removeClass("ui-selected").css("border","");
+				$("#sortableOrderCol_" + col).find(".selectedOrderCell").removeClass("selectedOrderCell");
 			});
 			$( "#FillBottomColumn" ).button({disabled : false})
 				.click(function(){
@@ -505,6 +520,7 @@
 			$( "#SortDeselect" ).button()
 				.click(function(){
 					$(".sortableOrder li").removeClass("ui-selected").css("border","");
+					$(".sortableOrder li").find(".selectedOrderCell").removeClass("selectedOrderCell");
 			});
 			
 			$( "#tabs" ).tabs({collapsible: true}).find( ".ui-tabs-nav" ).sortable({ axis: "x" });
@@ -568,7 +584,7 @@
 
 <a id="qrimagelink" href="./qrcode"><img id="qrimage" src="./qrcode" height=50px style="vertical-align: middle"></a>
 
-<div class="demo" style="width:1500px">
+<div class="wellPlates" style="width:1550px">
 
 <div id="tabs">
 	<ul>
@@ -673,15 +689,16 @@
 				{% for num2 in range(col*12,(col+1)*12) %}
 					<li id=sortOrder_{{ num2 }} class="ui-state-default">
 						<label id=sortOrderCell_{{ num2 }} class='sortOrderCell removeSelect'></label>
-						<br class='removeSelect'/>
-						<label id=sortOrderName_{{ num2 }} class='sortOrderName removeSelect'></label>
-						<br class='removeSelect' />
 						<label id=sortOrderConc_{{ num2 }} class='sortOrderConc removeSelect'></label>
 						<label id=sortOrderConcUnit_{{ num2 }} class='sortOrderConcUnit removeSelect'></label>
+						<br class='removeSelect'/>
+						<label id=sortOrderName_{{ num2 }} class='sortOrderName removeSelect'></label>
 					</li>
 				{% endfor %}
 			</ul>
-		
+			{% if col != 7 %}
+				<img src="static/arrow.png" alt="arrow" height="520" width="50" style="margin-left: 4px; margin-top: 10px; float: left;">
+			{% endif %}
 		{% endfor %}
 		
 	</div>
