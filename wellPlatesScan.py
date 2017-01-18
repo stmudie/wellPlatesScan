@@ -104,11 +104,13 @@ class WellNamespace(BaseNamespace):
 	dictKey = ['COORD','WASH','TYPE']
 	data = {'COORD': positions, 'WASH': washes, 'TYPE': types}
 	for posNum in range(3):
-	    scanPV = basePV + 'scan1.'
+	    print posNum
+            scanPV = basePV + 'scan1.'
             result += caput(scanPV+'R'+str(1+posNum)+'PV', positioner[posNum])
             result += caput(scanPV+'P'+str(1+posNum)+'PV', positioner[posNum])
 	    result += caput(scanPV+'P'+str(1+posNum)+'SM', 1)
             time.sleep(0.1)
+            print data[dictKey[posNum]]
             result += caput(scanPV+'P'+str(1+posNum)+'PA', data[dictKey[posNum]])
             result += caput(scanPV+'NPTS', len(positions))
 	if result != 13 :
